@@ -1,21 +1,26 @@
 FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PYTHON_VERSION=3.8 
+    PYTHON_VERSION=3.8
 
-# Install base tools
+# Install base tools and Python
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc \
-    wget \
-    gnupg \
-    curl \
-    software-properties-common \
-    python${PYTHON_VERSION} \
-    python3-pip \
-    && \
+        gcc \
+        wget \
+        gnupg \
+        curl \
+        software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa && \
+    apt-get update && \
+    apt-get install -y python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils && \
+    curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Make python3 and pip3 point to the right version
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1 && \
+    ln -s /usr/local/bin/pip3 /usr/bin/pip3
 
 WORKDIR /app
 COPY . /app
