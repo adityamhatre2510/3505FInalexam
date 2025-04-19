@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drone-ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drone-ai
+  template:
+    metadata:
+      labels:
+        app: drone-ai
+    spec:
+      containers:
+        - name: drone-ai
+          image: rejoiceitur/drone_ai:latest
+          ports:
+            - containerPort: 11434
