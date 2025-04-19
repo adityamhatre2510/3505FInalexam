@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: drone-ai
+  name: ollama-ai  # ✅ your new name here
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: drone-ai
+      app: ollama-ai  # ✅ same here
   template:
     metadata:
       labels:
-        app: drone-ai
+        app: ollama-ai  # ✅ and here
     spec:
       containers:
-        - name: drone-ai
-          image: rejoiceitur/drone_ai:latest
+        - name: ollama-ai  # ✅ container name can also match
+          image: adibowvalley/3505
           ports:
             - containerPort: 11434
