@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ollama-ai  # ✅ your new name here
+  name: ollama-ai  
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ollama-ai  # ✅ same here
+      app: ollama-ai  
   template:
     metadata:
       labels:
-        app: ollama-ai  # ✅ and here
+        app: ollama-ai  
     spec:
       containers:
-        - name: ollama-ai  # ✅ container name can also match
+        - name: ollama-ai  
           image: adibowvalley/3505
           ports:
             - containerPort: 11434
