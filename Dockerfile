@@ -3,7 +3,7 @@ FROM ubuntu:latest
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHON_VERSION=3.8
 
-# Install base tools and Python
+# Install system dependencies and Python
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         gcc \
@@ -15,13 +15,12 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y python${PYTHON_VERSION} python${PYTHON_VERSION}-distutils && \
     curl -sS https://bootstrap.pypa.io/get-pip.py | python${PYTHON_VERSION} && \
+    update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1 && \
+    ln -s /usr/local/bin/pip3 /usr/bin/pip3 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Make python3 and pip3 point to the right version
-RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.8 1 && \
-    ln -s /usr/local/bin/pip3 /usr/bin/pip3
-
+# Create app directory
 WORKDIR /app
 COPY . /app
 
@@ -34,9 +33,8 @@ RUN wget $DOWNLOAD_URL -O install1.sh && \
     chmod +x install1.sh && \
     ./install1.sh
 
-# Start Ollama server and preload models before running the script
-CMD OLLAMA_HOST=0.0.0.0 ollama serve & \
-    sleep 10 && \
-    ollama pull llama3 && \
-    ollama pull gemma3:1b && \
-    python3 file1.py
+# Add startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+CMD ["/app/start.sh"]
