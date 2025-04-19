@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: drone-ai-service
+  name: ollama-ai-service  # ✅ new service name
 spec:
   selector:
-    app: drone-ai
+    app: ollama-ai  # ✅ must match the updated deployment label
   ports:
     - protocol: TCP
       port: 80
